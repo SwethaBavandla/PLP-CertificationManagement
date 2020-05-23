@@ -1,0 +1,23 @@
+<template>
+
+    <lightning-card title="Submit for Approval" icon-name="action:submit_for_approval">
+    </lightning-card>
+    
+    <template for:each={Requests} for:item="request" for:index="i">
+        
+        <lightning-card key={request.Id}>
+            
+            <Lightning-record-view-form record-id={request.Id} object-api-name="Certification_Request__c">
+                <lightning-output-field field-name="Name"></lightning-output-field>
+                <lightning-output-field field-name="Employee__c"></lightning-output-field>
+                <lightning-output-field field-name="Certification__c"></lightning-output-field>
+                
+            </Lightning-record-view-form>
+            <lightning-button-group>
+                <lightning-button label="Submit for approval" variant="brand" value={i} onclick={submitreq}></lightning-button>
+                
+            </lightning-button-group>
+        
+        </lightning-card>
+    </template>
+</template>

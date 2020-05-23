@@ -1,0 +1,223 @@
+<template>
+    <div class="slds-page-header">
+    
+       <lightning-card>
+          
+          <h3 slot="title">
+            <lightning-icon icon-name="utility:connected_apps" size="medium"></lightning-icon>
+            Certifications
+          </h3>
+            <lightning-button variant='brand' slot="actions" onclick={certiform1} label='New'></lightning-button>
+          </lightning-card>
+      </div>
+      <!-- Displaying the certifications in table -->
+      <div class="slds-scrollable">
+       <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Name">Certification Name</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="First Name"> Certification ID</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Last Name">Certification Cost</div>
+                    </th>
+                    <th class="" scope="col">
+                      <div class="slds-truncate" ></div>
+                  </th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={Certifications} for:item="certification" for:index='i'>
+                    <tr key={certification.Id}>
+                        
+                        <th scope="col">
+                            <div>{certification.Name}</div>
+                        </th>
+                        <th scope="col">
+                            <div>{certification.Certification_ID__c}</div>
+                        </th>
+                        <th scope="col">
+                            <div>{certification.Certification_Cost__c}</div>
+                        </th>
+                        <th scope="col">
+                          <div>
+                            <lightning-button label = "View" onclick = {certiform2} data-key = {certification.Id} value = {i} variant='brand'></lightning-button>
+                           &nbsp;&nbsp;
+                              <lightning-button label = "Edit" onclick = {certiform} data-key = {certification.Id} value = {i} variant='brand'></lightning-button>
+                            &nbsp;&nbsp;
+                            <lightning-button label="Delete" if:true={isAddAble} onclick={deleteRequest} data-key={certification.Id} variant="destructive" class="slds-m-around_medium" value={i}>
+                            </lightning-button>
+                            </div>
+                        </th>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        </div>
+        <!-- Edit the Certification Details -->
+        <template if:true={certiflag}>
+          <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+               <!-- modal header start -->
+               <header class="slds-modal__header">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                     <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                     <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Certification Form</h2>
+               </header>
+              <div
+                class="slds-modal__content slds-p-around_medium"
+                id="modal-content-id-6"
+              >
+                <lightning-input
+                  label="Certififcation Name"
+                  value={CertName}
+                  type="String"
+                  
+                  required
+                  onchange={CertNameChange}
+                ></lightning-input>
+                <lightning-input
+                  label="Certification ID"
+                  value={CertId}
+                  type="Text"
+                  required
+                  onchange={CertIdChange}
+                ></lightning-input>
+                <lightning-input
+                  label="Certification Cost"
+                  value={CertCost}
+                  type="Number"
+                  required
+                  onchange={CertCostChange}
+                ></lightning-input>
+                <lightning-input
+                  label="Certification Comments"
+                  value={CertComm}
+                  type="Text"
+                  onchange={CertCommChange}
+                ></lightning-input>
+              </div>
+        
+              <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={closepopup}>
+                  Cancel
+                </button>
+                <button class="slds-button slds-button_success" onclick={updatecert}>
+                  Update
+                </button>
+              </footer>
+            </div>
+          </section>
+          <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <!-- Add certifications details -->
+        <template if:true={certiflag1}>
+          <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+               <!-- modal header start -->
+               <header class="slds-modal__header">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                     <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                     <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Add Certification</h2>
+               </header>
+              <div
+                class="slds-modal__content slds-p-around_medium"
+                id="modal-content-id-7"
+              >
+                <lightning-input
+                  label="Certification Name"
+                  
+                  type="String"
+                  required
+                  onchange={CertNameChange}
+                ></lightning-input>
+                <lightning-input
+                  label="Certification ID"
+                 
+                  type="Text"
+                  required
+                  onchange={CertIdChange}
+                ></lightning-input>
+                <lightning-input
+                  label="Certification Cost"
+                  
+                  type="Currency"
+                  required
+                  onchange={CertCostChange}
+                ></lightning-input>
+                <lightning-input
+                  label="Certifiation Comments"
+                  
+                  type="Text"
+                  onchange={CertCommChange}
+                ></lightning-input>
+              </div>
+        
+              <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={closepopup}>
+                  Cancel
+                </button>
+                <button class="slds-button slds-button_success" onclick={addcert}>
+                  Add
+                </button>
+              </footer>
+            </div>
+          </section>
+          <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <!-- View Certification Details -->
+        <template if:true={certiflag2}>
+          <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+               <!-- modal header start -->
+               <header class="slds-modal__header">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                     <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                     <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="modal-heading-03" class="slds-text-heading_medium slds-hyphenate">View Certification Details</h2>
+               </header>
+              <div
+                class="slds-modal__content slds-p-around_medium"
+                id="modal-content-id-8"
+              >
+                
+                <p class = 'text'> Certifiation Name</p>
+                <p class = 'text1'><b>{CertName}</b></p><br>
+                <p class = 'text'> Certification ID</p>
+                <p class = 'text1'><b>{CertId}</b></p><br>
+                <p class = 'text'> Certification Cost</p>
+                <p class = 'text1'><b>{CertCost}</b></p><br>
+                <p class = 'text'> Comments</p>
+                <p class = 'text1'><b>{CertComm}</b></p><br>
+    
+                </div>
+              <footer class="slds-modal__footer">
+              <button class="slds-button slds-button_neutral" onclick={closepopup}>
+                Close
+              </button>
+             
+            </footer>
+            </div>
+          </section>
+          <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        </template>

@@ -1,0 +1,37 @@
+<template>
+    
+    
+    <lightning-card title="Update Result" icon-name="action:update_status" >
+       
+       
+       <lightning-button label="Refresh" slot="actions" variant="brand" onclick={refreshButtonClicked}></lightning-button>
+          
+       </lightning-card>
+ 
+        <template for:each={Requests1} for:item="request1" for:index="i">
+            <lightning-card key={request1.Id}>
+                <Lightning-record-view-form record-id={request1.Id} object-api-name="Certification_Request__c">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                    <lightning-output-field field-name="Name"></lightning-output-field>
+                    <lightning-output-field field-name="Employee__c"></lightning-output-field>
+                    <lightning-output-field field-name="Certification__c"></lightning-output-field>
+                </div>
+                    <div class="slds-col slds-size_1-of-2">
+                    <lightning-output-field field-name="Voucher__c"></lightning-output-field>
+                </div></div>
+                    </Lightning-record-view-form>
+                <lightning-button-group>
+                    <lightning-button label="Passed" value={i} variant="brand" onclick={passedreq}></lightning-button>
+                    <lightning-button label="Failed" value={i} variant="destructive" onclick={failedreq}></lightning-button>
+                    
+                </lightning-button-group>
+            </lightning-card>
+        </template>
+   
+    
+    
+
+</template>
+
+

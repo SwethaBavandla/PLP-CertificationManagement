@@ -1,0 +1,148 @@
+<template>
+    <div class="slds-page-header">
+    
+       <lightning-card  >
+        <h3 slot="title" class="text">
+            <lightning-icon icon-name="utility:connected_apps" size="medium"></lightning-icon>
+            Certification Requests
+          </h3>
+           <lightning-button variant="brand" slot="actions" onclick={reqform} label='New'></lightning-button>
+          <lightning-combobox
+           name="Requests"
+           
+           value={valuee}
+           placeholder="View Requests"
+           options={options}
+           onchange={reqform1}
+           slot = "actions" ></lightning-combobox>  
+          </lightning-card>
+      </div> 
+      <template if:true={reqflag1}>
+        <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container ">
+                <header class="slds-modal__header">
+               <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                  <lightning-icon icon-name="utility:close"
+                     alternative-text="close"
+                     variant="inverse"
+                     size="small" ></lightning-icon>
+                  <span class="slds-assistive-text">Close</span>
+               </button>
+               <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">View Certification Requests
+                
+                
+                   
+             
+           
+             </h2>
+               
+              </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div class="slds-scrollable">
+       <table class= " slds-table slds-table_bordered" >
+            <thead>
+                <tr >
+                    
+                    <th class="" >
+                        <div class="slds-truncate" title="Name">Employee ID</div>
+                    </th>
+                    <th class="">
+                        <div class="slds-truncate" title="First Name"> Certification</div>
+                    </th>
+                    <th class="" >
+                        <div class="slds-truncate" title="Last Name">Status</div>
+                    </th>
+                    <th class="" >
+                      <div class="slds-truncate" >Voucher</div>
+                  </th>
+                  <th class="" >
+                    <div class="slds-truncate" >Due Date</div>
+                </th>
+                <th class="" >
+                  <div class="slds-truncate" >Comments</div>
+              </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={certi} for:item="certificationReq" for:index='i'>
+                    <tr key={certificationReq.Id}>
+                        
+                        <th >
+                            <div>{certificationReq.Employee__r.Name}</div>
+                        </th>
+                        <th >
+                            <div>{certificationReq.Certification__r.Name}</div>
+                        </th>
+                        <th >
+                            <div>{certificationReq.Status__c}</div>
+                        </th>
+                        <th >
+                          <div if:true={certificationReq.Voucher__c}>{certificationReq.Voucher__r.Name}</div>
+                          <div if:false={certificationReq.Voucher__c}></div>
+                        </th>
+                        <th >
+                          <div>{certificationReq.Due_Datee__c}</div>
+                        </th>
+                        <th >
+                          <div>{certificationReq.Comments__c}</div>
+                        </th>
+                        
+                        
+                    </tr>
+                </template>
+            </tbody>
+        </table></div>
+            </div>
+            
+        <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={closepopup}>Cancel</button>
+               
+                </footer>
+                </div>
+            </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </template> 
+
+        <template if:true={reqflag}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                   <!-- modal header start -->
+                   <header class="slds-modal__header">
+                      <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                         <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                         <span class="slds-assistive-text">Close</span>
+                      </button>
+                      <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">New Request Form</h2>
+                   </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-4">
+                    <c-lookupcomponent object-name="Employee__c" 
+                        field-name="Name" 
+                        label="Employee"
+                        parentidfield="Employee__c"
+                        onselect={handleAutoSelect1}
+                        iconname="standard:contact">
+                    </c-lookupcomponent>
+                    <c-lookupcomponent object-name="Certification__c" 
+                        field-name="Name" 
+                        label="Certification" 
+                        parentidfield="Certification__c" 
+                        onselect={handleAutoSelect}
+                        iconname="standard:drafts">
+                    </c-lookupcomponent>
+                    <lightning-input label="Request Due Date" value={ReqDueDate} type="date" required onchange={ReqDueDateChange}></lightning-input>
+                    <lightning-input label="Request Comments" value={ReqComm} type="Text" onchange={ReqCommChange}></lightning-input>
+                </div>
+                <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={closepopup}>Cancel</button>
+                <button class="slds-button slds-button_success" onclick={addreq}>Add</button>
+                </footer>
+                </div>
+            </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        
+          
+        </template>

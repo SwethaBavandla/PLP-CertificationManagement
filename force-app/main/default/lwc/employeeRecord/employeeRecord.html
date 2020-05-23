@@ -1,0 +1,149 @@
+<template>
+    <div class="slds-page-header">
+    <lightning-card>
+           <h3 slot="title">
+             <lightning-icon icon-name="utility:connected_apps" size="medium"></lightning-icon>
+             Employees
+            </h3>
+                 <lightning-button variant='brand' slot="actions" onclick={empform} label='New'></lightning-button>
+            </lightning-card>
+       </div> 
+    <div class="slds-scrollable">
+        <table class= " slds-table slds-table_bordered" >
+             <thead>
+                 <tr>
+                    <th class="" >
+                         <div class="slds-truncate" title="Name">Employee ID</div>
+                     </th>
+                     <th class="">
+                         <div class="slds-truncate" > Employee Name</div>
+                     </th>
+                     <th class="" >
+                         <div class="slds-truncate" >Primary Skill</div>
+                     </th>
+                     <th class="" >
+                       <div class="slds-truncate" >Secondary Skill</div>
+                   </th>
+                   <th class="" >
+                     <div class="slds-truncate" >Experience</div>
+                 </th>
+                 <th class="" >
+                   <div class="slds-truncate" >Email</div>
+               </th>
+               <th></th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <template for:each={Employees} for:item="emp" for:index='i'>
+                     <tr key={emp.Id}>
+                         
+                         <th >
+                             <div>{emp.Name}</div>
+                         </th>
+                         <th >
+                             <div>{emp.Employee_Name__c}</div>
+                         </th>
+                         <th >
+                             <div>{emp.Primary_Skill__c}</div>
+                         </th>
+                         <th >
+                           <div>{emp.Secondary_Skill__c}</div>
+                         </th>
+                         <th >
+                           <div>{emp.Experience__c}</div>
+                         </th>
+                         <th >
+                           <div>{emp.Email__c}</div>
+                         </th>
+                         <th>
+                             <div>
+                         <lightning-button label="Update"  onclick={editemp}
+                               data-key={emp.Id} variant="brand" class="slds-m-around_medium" value={i}>
+                           </lightning-button>
+                                 
+                             <lightning-button label="Delete"  onclick={deleteemp}
+                                 data-key={emp.Id}  variant="destructive" class="slds-m-around_medium" value={i}>
+                             </lightning-button>
+                         </div>
+                        </th>
+                     </tr>
+                 </template>
+             </tbody>
+         </table></div>
+    <template if:true={newempform}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+               <!-- modal header start -->
+               <header class="slds-modal__header">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                     <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                     <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Employee Form</h2>
+               </header>
+              <div
+                class="slds-modal__content slds-p-around_medium"
+                id="modal-content-id-6">
+    <lightning-record-edit-form object-api-name="Employee__c" onsuccess={handleSuccess1} onerror={handleError}>
+    <div class="slds-m-around_medium">
+            <lightning-input-field field-name='Name' required ></lightning-input-field>
+            <lightning-input-field field-name='Employee_Name__c' required></lightning-input-field>
+            <lightning-input-field field-name='Email__c' required></lightning-input-field>
+            <lightning-input-field field-name='Primary_Skill__c' required></lightning-input-field>
+            <lightning-input-field field-name='Secondary_Skill__c' ></lightning-input-field>
+            <lightning-input-field field-name='Experience__c' required></lightning-input-field>
+            <lightning-input-field field-name='Comments__c' ></lightning-input-field>
+            <footer >
+                <lightning-button variant="success" type="submit" name="save" label="Add">
+                </lightning-button>
+                <lightning-button  onclick={closepopup} label="Close">
+                </lightning-button>
+            </footer>
+       </div>
+    </lightning-record-edit-form>
+</div>
+</div>
+</section>
+</template>
+<template if:true={editemployee}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+           <!-- modal header start -->
+           <header class="slds-modal__header">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                 <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" >X</lightning-icon>
+                 <span class="slds-assistive-text">Close</span>
+              </button>
+              <h2 id="modal-heading-09" class="slds-text-heading_medium slds-hyphenate">Edit Employee Form</h2>
+           </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-5">
+    <lightning-record-edit-form object-api-name="Employee__c" record-id={recordId} onerror={handleError} onsuccess={handleSuccess}>
+    <div class="slds-m-around_medium">
+        <lightning-input-field field-name='Name' required ></lightning-input-field>
+        <lightning-input-field field-name='Employee_Name__c' required></lightning-input-field>
+        <lightning-input-field field-name='Email__c' required></lightning-input-field>
+        <lightning-input-field field-name='Primary_Skill__c' required></lightning-input-field>
+        <lightning-input-field field-name='Secondary_Skill__c' ></lightning-input-field>
+        <lightning-input-field field-name='Experience__c' required></lightning-input-field>
+        <lightning-input-field field-name='Comments__c' ></lightning-input-field>
+        <footer >
+            <lightning-button variant="success" type="submit" name="save" label="Update">
+            </lightning-button>
+            <lightning-button  onclick={closepopup} label="Close">
+            </lightning-button>
+        </footer>
+       </div>
+</lightning-record-edit-form>
+</div>
+</div>
+</section>
+</template>
+</template>

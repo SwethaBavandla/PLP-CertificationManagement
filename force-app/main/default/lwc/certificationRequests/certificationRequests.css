@@ -1,0 +1,10 @@
+.slds-modal__container {
+    max-width: 65rem;
+    width: 65%;
+}
+.text{
+    font-size: 150%;
+}
+.button1{
+    font-size: 10px;
+}

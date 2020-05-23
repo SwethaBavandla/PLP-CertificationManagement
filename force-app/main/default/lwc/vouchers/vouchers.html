@@ -1,0 +1,258 @@
+<template>
+<div class="slds-page-header">
+
+   <lightning-card>
+      
+      <h3 slot="title">
+        <lightning-icon icon-name="utility:connected_apps" size="medium"></lightning-icon>
+        Vouchers
+    </h3>
+            <lightning-button variant='brand' slot="actions" onclick={vouform1} label='New'></lightning-button>
+        
+      
+   </lightning-card>
+  </div>
+  <!-- Displaying vouchers in table  -->
+  <div class="slds-scrollable">
+   <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <thead>
+            <tr class="slds-line-height_reset">
+                
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Name">Voucher ID</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="First Name"> Certification</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="Last Name">Active</div>
+                </th>
+                <th class="" scope="col">
+                  <div class="slds-truncate" ></div>
+              </th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={Vouchers} for:item="voucher" for:index='i'>
+                <tr key={voucher.Id}>
+                    
+                    <th scope="col">
+                        <div>{voucher.Name}</div>
+                    </th>
+                    <th scope="col">
+                        <div>{voucher.Certification__r.Name}</div>
+                    </th>
+                    <th scope="col">
+                        <div>{voucher.Active__c}</div>
+                    </th>
+                    <th scope="col">
+                      <div>
+                        <lightning-button label = "View" onclick = {vouform2} data-key = {voucher.Id} value = {i} variant='brand'></lightning-button>
+                      
+                      &nbsp;&nbsp;
+                        
+                          <lightning-button label = "Edit" onclick = {vouform} data-key = {voucher.Id} value = {i} variant='brand'></lightning-button>
+                        &nbsp;&nbsp;
+                        <lightning-button label="Delete" if:true={isAddAble} onclick={deletereq} data-key={voucher.Id} variant="destructive"  value={i}>
+                        </lightning-button></div>
+                    </th>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+  </div>   
+  <!-- Edit Voucher Details -->
+    <template if:true={vouflag}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+           <!-- modal header start -->
+           <header class="slds-modal__header">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                 <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                 <span class="slds-assistive-text">Close</span>
+              </button>
+              <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Voucher Form</h2>
+           </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-6"
+          >
+            <lightning-input
+              label="Voucher Id"
+              value={VouId}
+              type="String"
+              minlength="10"
+              maxlength="10"
+              message-when-bad-input="Id should be 10 characters long."
+              required
+              onchange={VouIdChange}
+            ></lightning-input>
+            <lightning-input
+              label="Voucher Cost"
+              value={VouCost}
+              type="Currency"
+              required
+              onchange={VouCostChange}
+            ></lightning-input>
+            <lightning-input
+              label="Voucher Validity"
+              value={VouValid}
+              type="date"
+              required
+              onchange={VouValidChange}
+            ></lightning-input>
+            <c-lookupcomponent
+              object-name="Certification__c"
+              field-name="Name"
+              label="Certification"
+              parentidfield="Certification__c"
+              onselect={handleAutoSelect}
+              iconname="standard:account"
+              provide-record={VouCert}
+            ></c-lookupcomponent>
+    
+            <lightning-input
+              label="Voucher Comments"
+              value={VouComm}
+              type="Text"
+              onchange={VouCommChange}
+            ></lightning-input>
+          </div>
+    
+          <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick={closepopup}>
+              Cancel
+            </button>
+            <button class="slds-button slds-button_success" onclick={updateVoucher}>
+              Update
+            </button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- Add voucher form -->
+    <template if:true={vouflag1}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+           <!-- modal header start -->
+           <header class="slds-modal__header">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                 <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                 <span class="slds-assistive-text">Close</span>
+              </button>
+              <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Add New Voucher</h2>
+           </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-7"
+          >
+            <lightning-input
+              label="Voucher Id"
+             
+              type="String"
+              minlength="10"
+              maxlength="10"
+              message-when-bad-input="Id should be 10 characters long."
+              required
+              onchange={VouIdChange}
+            ></lightning-input>
+            <lightning-input
+              label="Voucher Cost"
+             
+              type="Number"
+              required
+              onchange={VouCostChange}
+            ></lightning-input>
+            <lightning-input
+              label="Voucher Validity"
+              
+              type="date"
+              required
+              onchange={VouValidChange}
+            ></lightning-input>
+            <c-lookupcomponent
+              object-name="Certification__c"
+              field-name="Name"
+              label="Certification"
+              parentidfield="Certification__c"
+              onselect={handleAutoSelect}
+              iconname="standard:account"
+              
+            ></c-lookupcomponent>
+    
+            <lightning-input
+              label="Voucher Comments"
+              
+              type="Text"
+              onchange={VouCommChange}
+            ></lightning-input>
+          </div>
+    
+          <footer class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral" onclick={closepopup}>
+              Cancel
+            </button>
+            <button class="slds-button slds-button_success" onclick={addvou}>
+              Add
+            </button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- View voucher Details -->
+    <template if:true={vouflag2}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+           <!-- modal header start -->
+           <header class="slds-modal__header">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closepopup}>
+                 <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                 <span class="slds-assistive-text">Close</span>
+              </button>
+              <h2 id="modal-heading-03" class="slds-text-heading_medium slds-hyphenate">View Voucher Details</h2>
+           </header>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-8"
+          >
+            
+            
+            <p class = "text"> Voucher ID</p>
+            <p  class = "text1"><b>
+              {VouId}</b>
+            </p><br>
+            <p class = "text"> Certification</p>
+            <p  class = "text1"><b>{VouCert}</b></p><br>
+            <p class = "text"> Active</p>
+            <p  class = "text1"><b>{Vouactive}</b></p><br>
+            <p class = "text"> Voucher Cost</p>
+            <p  class = "text1"><b>{VouCost}</b></p><br>
+            <p class = "text"> Validity</p>
+            <p  class = "text1"><b>{VouValid}</b></p><br>
+            <p class = "text"> Comments</p>
+            <p  class = "text1"><b>{VouComm}</b></p><br>
+
+            </div>
+          <footer class="slds-modal__footer">
+          <button class="slds-button slds-button_neutral" onclick={closepopup}>
+            Close
+          </button>
+         
+        </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    </template>
